@@ -15,31 +15,29 @@
             <img src="{{ asset('img/loader-tiny.gif') }}" />
         </div>
         @if (!$load)
-            @if($orders) 
-             
+            @if($orders && !array_key_exists("error",$orders))   
                 <ul class="sidebar-block-list wc-orders-list" >
                     @foreach($orders as $order)
-
                         <li class="orderList">
-                            <div>
-                                <a href="{{$order['link']}}" target="_blank">{{ $order['merchant_name']}}</a><br>
-                                <span class="">{{ $order['shop_url'] }}</span>
-                            </div>
-                            <div>
-                                <small class="text-help">Status : {{ $order['status'] }}</small>
-                                <small class="text-help pull-right">Plan : {{ $order['current_plan'] }}</small>
-                            </div>
-                           
+                            @php
+                                $arrayWithLink=$order;
+                                unset($order['link']);
+                            @endphp
+                            @foreach($order as $key => $value)
+                               <div>
+                                   <small class="text-help">{{ ucfirst(implode(' ', array_map('ucfirst', explode('_', $key)))) }}</small> : {{ $value }}
+                               </div> 
+                            @endforeach
+                            @if(array_key_exists("link",$arrayWithLink))
+                                <a href="{{ $arrayWithLink['link'] }}" target="_blank">Link</a>
+                            @endif
                         </li>
                     @endforeach
-                </ul>
-               
-                
+                </ul>  
             @else
                 <div class="text-help margin-top-10 wc-no-orders">{{ __("No orders found") }}</div>
             @endif
         @endif
-      
     </div>
 </div>
 @endif
